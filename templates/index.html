@@ -1,54 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Tic Tac Toe</title>
+    <meta charset="UTF-8">
+    <title>Age Verification</title>
     <style>
-        table { border-collapse: collapse; margin: 20px auto; }
-        td { width: 60px; height: 60px; text-align: center; vertical-align: middle;
-             font-size: 2em; border: 1px solid #000; cursor: pointer; }
+        body {
+            background-color: #2a0000;
+            color: gold;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 100px;
+        }
+        h1 {
+            font-size: 3em;
+        }
+        .btn {
+            padding: 15px 40px;
+            margin: 20px;
+            font-size: 1.5em;
+            background-color: darkred;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background-color: crimson;
+        }
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;">Tic Tac Toe</h1>
-    <table id="board">
-        {% for i in range(3) %}
-        <tr>
-            {% for j in range(3) %}
-            <td data-row="{{ i }}" data-col="{{ j }}"></td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <script>
-        document.querySelectorAll("td").forEach(td => {
-            td.onclick = () => {
-                const row = td.dataset.row;
-                const col = td.dataset.col;
-                fetch("/move", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ row: parseInt(row), col: parseInt(col) })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.board) {
-                        updateBoard(data.board);
-                        if (data.winner) {
-                            alert("Winner: " + data.winner);
-                        }
-                    }
-                });
-            };
-        });
-
-        function updateBoard(board) {
-            const cells = document.querySelectorAll("td");
-            cells.forEach(cell => {
-                const row = cell.dataset.row;
-                const col = cell.dataset.col;
-                cell.textContent = board[row][col];
-            });
-        }
-    </script>
+    <h1>Are you 18 or older?</h1>
+    <a href="{{ url_for('yes') }}"><button class="btn">Yes</button></a>
+    <a href="{{ url_for('no') }}"><button class="btn">No</button></a>
 </body>
 </html>
