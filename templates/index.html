@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>tic-tac-toe</title>
+    <title>Tic Tac Toe</title>
     <style>
         table { border-collapse: collapse; margin: 20px auto; }
         td { width: 60px; height: 60px; text-align: center; vertical-align: middle;
@@ -9,7 +9,7 @@
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;">Крестики-нолики</h1>
+    <h1 style="text-align:center;">Tic Tac Toe</h1>
     <table id="board">
         {% for i in range(3) %}
         <tr>
@@ -34,7 +34,7 @@
                     if (data.board) {
                         updateBoard(data.board);
                         if (data.winner) {
-                            alert("Победил: " + data.winner);
+                            alert("Winner: " + data.winner);
                         }
                     }
                 });
@@ -52,4 +52,3 @@
     </script>
 </body>
 </html>
-
