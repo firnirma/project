@@ -6,9 +6,9 @@ board = [["" for _ in range(3)] for _ in range(3)]
 current_player = "X"
 
 def check_winner():
-    lines = board + list(map(list, zip(*board)))  # строки и столбцы
-    lines.append([board[i][i] for i in range(3)])  # диагональ \
-    lines.append([board[i][2 - i] for i in range(3)])  # диагональ /
+    lines = board + list(map(list, zip(*board)))
+    lines.append([board[i][i] for i in range(3)])
+    lines.append([board[i][2 - i] for i in range(3)])
     for line in lines:
         if line.count(line[0]) == 3 and line[0] != "":
             return line[0]
@@ -33,5 +33,3 @@ def move():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
