@@ -57,52 +57,25 @@
 <body>
     <h1>🎰 Slot Machine</h1>
 
-    <div class="slot-container">
-        <div class="slot" id="slot1">❓</div>
-        <div class="slot" id="slot2">❓</div>
-        <div class="slot" id="slot3">❓</div>
-    </div>
+    <h3>Welcome, {{ name }}!</h3>
+    <div id="balance">Balance: {{ balance }} coins</div>
 
-    <button class="spin-button" id="spinBtn" onclick="spin()">SPIN</button>
+    {% if slots %}
+        <div class="slot-container">
+            {% for s in slots %}
+                <div class="slot">{{ s }}</div>
+            {% endfor %}
+        </div>
+        <h2 id="message">{{ result }}</h2>
+    {% endif %}
 
-    <div id="balance">Balance: 100 coins</div>
-    <h2 id="message"></h2>
+    <form method="post" action="{{ url_for('spin') }}">
+        <button class="spin-button" name="bet" value="10">Bet 10</button>
+        <button class="spin-button" name="bet" value="20">Bet 20</button>
+        <button class="spin-button" name="bet" value="50">Bet 50</button>
+    </form>
 
-    <script>
-        const symbols = ['🍒', '🍋', '💎'];
-        let balance = 100;
-
-        function spin() {
-            if (balance < 10) {
-                document.getElementById("message").textContent = "You don’t have enough coins!";
-                return;
-            }
-
-            balance -= 10;
-
-            const slot1 = symbols[Math.floor(Math.random() * symbols.length)];
-            const slot2 = symbols[Math.floor(Math.random() * symbols.length)];
-            const slot3 = symbols[Math.floor(Math.random() * symbols.length)];
-
-            document.getElementById('slot1').textContent = slot1;
-            document.getElementById('slot2').textContent = slot2;
-            document.getElementById('slot3').textContent = slot3;
-
-            if (slot1 === slot2 && slot2 === slot3) {
-                document.getElementById("message").textContent = "🎉 JACKPOT! You win 100 coins!";
-                balance += 100;
-            } else {
-                document.getElementById("message").textContent = "Try again!";
-            }
-
-            document.getElementById("balance").textContent = "Balance: " + balance + " coins";
-
-            if (balance < 10) {
-                document.getElementById("spinBtn").disabled = true;
-                document.getElementById("spinBtn").style.backgroundColor = "gray";
-                document.getElementById("message").textContent = "You're out of coins! 🎭";
-            }
-        }
-    </script>
+    <br>
+    <a href="{{ url_for('logout') }}"><button class="topup-button">Logout</button></a>
 </body>
 </html>
