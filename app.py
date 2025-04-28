@@ -9,7 +9,7 @@ def index():
     if request.method == "POST":
         name = request.form["name"]
         session["name"] = name
-        session["balance"] = 500  # стартовый баланс побольше
+        session["balance"] = 500
         return redirect(url_for("slot"))
     return render_template("login.html")
 
