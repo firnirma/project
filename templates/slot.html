@@ -9,7 +9,7 @@
             color: gold;
             font-family: Arial, sans-serif;
             text-align: center;
-            padding-top: 60px;
+            padding-top: 50px;
         }
         h1 {
             font-size: 3em;
@@ -17,65 +17,91 @@
         .slot-container {
             display: flex;
             justify-content: center;
-            font-size: 4em;
-            margin: 30px 0;
+            align-items: center;
+            gap: 30px; /* пробелы между слотами */
+            font-size: 5em;
+            margin: 40px 0;
         }
         .slot {
-            margin: 0 15px;
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background-color: #500000;
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 10px #ffcc00;
+            box-shadow: 0 0 10px gold;
         }
-        .spin-button {
-            padding: 15px 50px;
-            font-size: 1.5em;
+        .controls {
+            margin-top: 20px;
+        }
+        input, button, select {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            margin: 10px;
+            border-radius: 10px;
+            border: none;
             background-color: darkred;
             color: white;
-            border: none;
-            border-radius: 10px;
             cursor: pointer;
+            transition: 0.2s;
         }
-        .spin-button:hover {
+        button:hover, select:hover {
             background-color: crimson;
         }
-        #balance {
+        #balance, #message {
             margin-top: 20px;
-            font-size: 1.2em;
-        }
-        #message {
-            margin-top: 30px;
             font-size: 1.5em;
-            color: lightgoldenrodyellow;
         }
     </style>
 </head>
 <body>
-    <h1>🎰 Slot Machine</h1>
 
+    <h1>🎰 Slot Machine</h1>
     <h3>Welcome, {{ name }}!</h3>
     <div id="balance">Balance: {{ balance }} coins</div>
 
-    {% if slots %}
-        <div class="slot-container">
-            {% for s in slots %}
-                <div class="slot">{{ s }}</div>
-            {% endfor %}
-        </div>
-        <h2 id="message">{{ result }}</h2>
-    {% endif %}
+    <div class="slot-container">
+        <div class="slot" id="slot1">❓</div>
+        <div class="slot" id="slot2">❓</div>
+        <div class="slot" id="slot3">❓</div>
+    </div>
 
-    <form method="post" action="{{ url_for('spin') }}">
-        <button class="spin-button" name="bet" value="10">Bet 10</button>
-        <button class="spin-button" name="bet" value="20">Bet 20</button>
-        <button class="spin-button" name="bet" value="50">Bet 50</button>
-    </form>
+    <div class="controls">
+        <form id="spinForm" method="post" action="{{ url_for('slot') }}">
+            <select name="bet" id="bet">
+                <option value="10">Bet 10</option>
+                <option value="20">Bet 20</option>
+                <option value="50">Bet 50</option>
+                <option value="100">Bet 100</option>
+            </select>
+            <button type="submit" id="spinBtn">SPIN</button>
+        </form>
+    </div>
 
-    <br>
-    <a href="{{ url_for('logout') }}"><button class="topup-button">Logout</button></a>
+    <div id="message">{{ result }}</div>
+
+    <script>
+        const symbols = ['🍒', '🍋', '💎', '🔔', '⭐'];
+        
+        function spinSlots() {
+            document.getElementById('slot1').textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            document.getElementById('slot2').textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            document.getElementById('slot3').textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        }
+
+        document.addEventListener("keydown", function(event) {
+            if (event.code === "Space") {
+                event.preventDefault();
+                spinSlots();
+                document.getElementById("spinForm").submit();
+            }
+        });
+
+        document.getElementById("spinBtn").addEventListener("click", function() {
+            spinSlots();
+        });
+    </script>
+
 </body>
 </html>
