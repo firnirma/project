@@ -18,7 +18,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 30px; /* пробелы между слотами */
+            gap: 30px;
             font-size: 5em;
             margin: 40px 0;
         }
@@ -62,9 +62,9 @@
     <div id="balance">Balance: {{ balance }} coins</div>
 
     <div class="slot-container">
-        <div class="slot" id="slot1">❓</div>
-        <div class="slot" id="slot2">❓</div>
-        <div class="slot" id="slot3">❓</div>
+        <div class="slot" id="slot1">🍒</div>
+        <div class="slot" id="slot2">🍋</div>
+        <div class="slot" id="slot3">💎</div>
     </div>
 
     <div class="controls">
@@ -83,23 +83,36 @@
 
     <script>
         const symbols = ['🍒', '🍋', '💎', '🔔', '⭐'];
-        
-        function spinSlots() {
-            document.getElementById('slot1').textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            document.getElementById('slot2').textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            document.getElementById('slot3').textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        let spinning = false;
+        let interval;
+
+        function startSpin() {
+            if (spinning) return; 
+
+            spinning = true;
+            interval = setInterval(() => {
+                document.getElementById('slot1').textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                document.getElementById('slot2').textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                document.getElementById('slot3').textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            }, 100); 
+
+            setTimeout(() => {
+                clearInterval(interval);
+                spinning = false;
+                document.getElementById("spinForm").submit();
+            }, 1000);
         }
+
+        document.getElementById("spinBtn").addEventListener("click", function(event) {
+            event.preventDefault();
+            startSpin();
+        });
 
         document.addEventListener("keydown", function(event) {
             if (event.code === "Space") {
                 event.preventDefault();
-                spinSlots();
-                document.getElementById("spinForm").submit();
+                startSpin();
             }
-        });
-
-        document.getElementById("spinBtn").addEventListener("click", function() {
-            spinSlots();
         });
     </script>
 
