@@ -76,6 +76,7 @@
                 <option value="100">Bet 100</option>
             </select>
             <button type="submit" id="spinBtn">SPIN</button>
+            <button type="submit" name="topup" value="true" id="topupBtn">Top up +100</button>
         </form>
     </div>
 
@@ -87,14 +88,14 @@
         let interval;
 
         function startSpin() {
-            if (spinning) return; 
+            if (spinning) return;
 
             spinning = true;
             interval = setInterval(() => {
                 document.getElementById('slot1').textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 document.getElementById('slot2').textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 document.getElementById('slot3').textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            }, 100); 
+            }, 100);
 
             setTimeout(() => {
                 clearInterval(interval);
@@ -106,6 +107,10 @@
         document.getElementById("spinBtn").addEventListener("click", function(event) {
             event.preventDefault();
             startSpin();
+        });
+
+        document.getElementById("topupBtn").addEventListener("click", function(event) {
+           
         });
 
         document.addEventListener("keydown", function(event) {
