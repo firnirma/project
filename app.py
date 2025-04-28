@@ -2,44 +2,45 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import random
 
 app = Flask(__name__)
-app.secret_key = 'secret'
+app.secret_key = 'secret_key_for_session'
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         name = request.form["name"]
         session["name"] = name
-        session["balance"] = 100
+        session["balance"] = 500  # стартовый баланс побольше
         return redirect(url_for("slot"))
     return render_template("login.html")
 
-@app.route("/slot")
+@app.route("/slot", methods=["GET", "POST"])
 def slot():
     if "name" not in session:
         return redirect(url_for("index"))
-    return render_template("slot.html", name=session["name"], balance=session["balance"])
+    
+    result = None
+    slots = ['❓', '❓', '❓']
 
-@app.route("/spin", methods=["POST"])
-def spin():
-    if "name" not in session:
-        return redirect(url_for("index"))
+    if request.method == "POST":
+        bet = int(request.form["bet"])
 
-    bet = int(request.form["bet"])
-    if session["balance"] < bet:
-        return "Insufficient funds", 403
+        if session["balance"] >= bet:
+            session["balance"] -= bet
 
-    session["balance"] -= bet
+            symbols = ['🍒', '🍋', '💎', '🔔', '⭐']
+            slots = [random.choice(symbols) for _ in range(3)]
 
-    symbols = ['🍒', '🍋', '💎']
-    results = [random.choice(symbols) for _ in range(3)]
+            if slots[0] == slots[1] == slots[2]:
+                win_amount = bet * 10
+                session["balance"] += win_amount
+                result = f"🎉 JACKPOT! You win {win_amount} coins!"
+            else:
+                result = "Try again!"
 
-    if results[0] == results[1] == results[2]:
-        session["balance"] += bet * 10
-        result = "JACKPOT!"
-    else:
-        result = "Try again!"
+        else:
+            result = "Not enough balance!"
 
-    return render_template("slot.html", name=session["name"], balance=session["balance"], result=result, slots=results)
+    return render_template("slot.html", name=session["name"], balance=session["balance"], result=result, slots=slots)
 
 @app.route("/logout")
 def logout():
