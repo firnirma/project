@@ -1,20 +1,13 @@
-# 🎮 Tic Tac Toe – Flask Web App
+🎰 Flask Slot Machine Game
 
-This is a simple **Tic Tac Toe** game built with **Python** and the **Flask** web framework.
+A fun, emoji-based slot machine game built with Flask.  
+Includes login, age verification, balance system, bets, top-up, and animated spin! 🍒🍋💎
 
 ## 🚀 How to Run the Project
 
-1. Install dependencies (make sure you have Python installed):
-```bash
+
+Open Terminal and run:
+git clone https://github.com/firnirma/project.git
+cd project
 pip install -r requirements.txt
-Run the app:
-python app.py
-Open your browser and go to:
-http://127.0.0.1:5000
-🧠 Features
-
-Classic 3x3 Tic Tac Toe
-Two-player mode (X and O)
-Winner detection logic
-Interactive web interface using HTML and JavaScript
-
+python3 app.py
