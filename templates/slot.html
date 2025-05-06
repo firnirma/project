@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slot Machine</title>
+    <style>
+        body {
+            background-color: #2a0000;
+            color: gold;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        h1 {
+            font-size: 3em;
+        }
+        .slot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            font-size: 4.5em;
+            margin: 40px 0;
+        }
+        .slot {
+            width: 80px;
+            height: 80px;
+            background-color: #500000;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px gold;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        input, button, select {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            margin: 10px;
+            border-radius: 10px;
+            border: none;
+            background-color: darkred;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover, select:hover {
+            background-color: crimson;
+        }
+        #balance {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        .jackpot {
+            font-size: 2em;
+            color: gold;
+            animation: flash 0.6s infinite alternate;
+            margin-top: 20px;
+        }
+        @keyframes flash {
+            0% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
 
+    <h1>🎰 Slot Machine</h1>
+    <h3>Welcome, {{ name }}!</h3>
+    <div id="balance">Balance: {{ balance }} coins</div>
+
+    <div class="slot-container">
+        <div class="slot" id="slot1">🍒</div>
+        <div class="slot" id="slot2">🍋</div>
+        <div class="slot" id="slot3">💎</div>
+        <div class="slot" id="slot4">🔔</div>
+        <div class="slot" id="slot5">⭐</div>
+    </div>
+
+    <div class="controls">
+        <form id="spinForm" method="post" action="{{ url_for('slot') }}">
+            <select name="bet" id="bet">
+                <option value="10">Bet 10</option>
+                <option value="20">Bet 20</option>
+                <option value="50">Bet 50</option>
+                <option value="100">Bet 100</option>
+            </select>
+            <button type="submit" id="spinBtn">SPIN</button>
+            <button type="submit" name="topup" value="true">Top up +100</button>
+        </form>
+    </div>
+
+    {% if result and 'JACKPOT' in result %}
+        <div class="jackpot">{{ result }}</div>
+    {% elif result %}
+        <div id="message">{{ result }}</div>
+    {% endif %}
+
+    <script>
+        const symbols = ['🍒', '🍋', '💎', '🔔', '⭐'];
+        let spinning = false;
+        let interval;
+
+        function startSpin() {
+            if (spinning) return;
+
+            spinning = true;
+            interval = setInterval(() => {
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById(`slot${i}`).textContent =
+                        symbols[Math.floor(Math.random() * symbols.length)];
+                }
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                spinning = false;
+                document.getElementById("spinForm").submit();
+            }, 1000);
+        }
+
+        document.getElementById("spinBtn").addEventListener("click", function(event) {
+            event.preventDefault();
+            startSpin();
+        });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.code === "Space") {
+                event.preventDefault();
+                startSpin();
+            }
+        });
+    </script>
+
+</body>
+</html>
